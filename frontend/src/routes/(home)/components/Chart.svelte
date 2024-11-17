@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, afterUpdate, onDestroy } from 'svelte';
   import Chart from 'chart.js/auto';
-  import type { Spectrum } from '../../../types/spectrum.types';
+  import type { Spectrum } from '../../../interfaces/spectrum.interfaces';
   import { chartScalesOptions } from '$lib/chartScalesOptions';
 
   export let type: 'line' | 'bar' | 'scatter';
