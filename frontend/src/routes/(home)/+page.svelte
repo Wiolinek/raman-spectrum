@@ -11,16 +11,11 @@
   import { removeSpectrum } from '$lib/utils/removeSpectrum';
   import { spectraStore } from '$stores/spectraStore';
   import AddDatasetButtons from './components/AddDatasetButtons.svelte';
-  import { renameSpectrum } from '$lib/utils/renameSpectrum';
-
-  enum ChartType {
-    Line = 'line',
-    Bar = 'bar',
-    Scatter = 'scatter',
-  }
+  import SpectrumChartSettings from './components/SpectrumChartSettings.svelte';
+  import { ChartType } from '$interfaces/chartType.enum';
 
   let newDatasetRows: { id: number; color: string }[] = [];
-  $: chartType = ChartType.Line;
+  let chartType = ChartType.Line;
 
   onMount(async () => {
     await fetchSpectra();
@@ -40,27 +35,7 @@
         class="flex flex-col gap-6 rounded-md shadow-heavy-box-shadow py-8 px-16"
         id={spectrum.id}
       >
-        <div class="flex flex-col gap-4">
-          <div class="flex align-center gap-4">
-            <p class="flex items-center">Chart settings</p>
-            {#each Object.values(ChartType) as type}
-              <Button variant="outlined" customClass="w-20" on:click={() => (chartType = type)}
-                >{type}</Button
-              >
-            {/each}
-          </div>
-          <div class="flex gap-4">
-            <label class="h-full shadow-sm rounded-md flex items-center gap-2 cursor-pointer">
-              Chart title:
-              <input
-                class="ring-1 ring-inset ring-primary rounded-md p-2"
-                type="text"
-                bind:value={spectrum.name}
-                on:input={() => renameSpectrum(spectrum.id, spectrum.name)}
-              />
-            </label>
-          </div>
-        </div>
+        <SpectrumChartSettings id={spectrum.id} name={spectrum.name} bind:chartType />
         <div class="flex flex-col gap-6 rounded-md">
           <div class="flex flex-col gap-10">
             <Chart type={chartType} {spectrum} />

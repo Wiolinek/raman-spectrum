@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "$lib/*": ["src/lib/*"],
-      "$stores/*": ["src/stores/*"]
+      "$stores/*": ["src/stores/*"],
+      "$interfaces/*": ["src/interfaces/*"]
     }
   },
   "include": ["src/**/*", "src/**/*.svelte"]

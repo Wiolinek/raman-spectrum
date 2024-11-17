@@ -53,14 +53,20 @@
   let previousType: 'line' | 'bar' | 'scatter' = type;
 
   afterUpdate(() => {
-    if (chart && type !== previousType) {
-      previousType = type;
-      chart.destroy();
-      chart = new Chart(chartCanvas, {
-        type,
-        data,
-        options,
-      });
+    if (chart) {
+      const currentTitle = chart.options.plugins?.title?.text;
+      if (type !== previousType || currentTitle !== spectrum.name) {
+        previousType = type;
+        chart.destroy();
+        chart = new Chart(chartCanvas, {
+          type,
+          data,
+          options,
+        });
+      } else {
+        chart.data = data;
+        chart.update();
+      }
     }
   });
 

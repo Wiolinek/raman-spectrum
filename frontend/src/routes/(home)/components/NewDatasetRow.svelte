@@ -12,13 +12,13 @@
   style="background-color: {color}"
 >
   <button
-    class="w-full px-4 py-3 md:py-5 md:px-6 outline-none rounded-md focus-visible:ring-ring focus-visible:ring-inset focus-visible:ring-2 items-center flex gap-x-3"
+    class="w-full px-4 py-3 md:py-5 md:px-6 outline-none rounded-md focus-visible:ring-ring focus-visible:ring-inset focus-visible:ring-2 items-center flex gap-x-3 text-primary"
     on:click={() => (isOpen = !isOpen)}
     {disabled}
   >
-    <!-- <h4 class="text-left text-base md:text-lg w-full font-medium text-secondary">{spectrum.name}</h4>
+    <!-- <h4 class="text-left text-base md:text-lg w-full font-medium">{spectrum.name}</h4>
 		<div
-			class="relative size-7 text-primary transition-transform {isOpen
+			class="relative size-7 transition-transform {isOpen
 				? 'rotate-180'
 				: 'rotate-90'}"
 		>

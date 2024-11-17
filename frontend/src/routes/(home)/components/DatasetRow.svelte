@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class="shadow-xl border border-neutral-300 rounded-md bg-white"
+  class="shadow-xl border border-neutral-300 rounded-md bg-white text-primary"
   style="background-color: {color}"
 >
   <button
@@ -21,9 +21,9 @@
     on:click={() => (isOpen = !isOpen)}
     {disabled}
   >
-    <h4 class="text-left text-base md:text-lg w-full font-medium text-secondary">{dataset.name}</h4>
+    <h4 class="text-left text-base md:text-lg w-full font-medium">{dataset.name}</h4>
     <div
-      class="relative size-7 text-primary transition-transform {isOpen
+      class="relative size-7 transition-transform {isOpen
         ? 'rotate-180'
         : 'rotate-90'}"
     >
