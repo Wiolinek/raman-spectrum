@@ -3,6 +3,11 @@ export interface DataPoint {
   y: number;
 }
 
+export enum Axis {
+  X = 'xAxisName',
+  Y = 'yAxisName',
+}
+
 export interface Dataset {
   id: string;
   name: string;
@@ -13,6 +18,8 @@ export interface Dataset {
 export interface Spectrum {
   id: string;
   name: string;
+  xAxisName: Axis.X;
+  yAxisName: Axis.Y;
   datasets: Dataset[];
   createdAt: string;
 }

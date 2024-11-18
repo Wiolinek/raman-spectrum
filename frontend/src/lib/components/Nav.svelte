@@ -1,9 +1,7 @@
 <script lang="ts" context="module">
 	export const navLinks = [
-		{ name: 'Spectra', path: '#' },
-		{ name: 'Upload', path: '#' },
-		{ name: 'Tutorials', path: '#' },
-		{ name: 'About', path: '#' },
+		{ name: 'Spectra', path: '/' },
+		{ name: 'User guidance', path: '/guidance' },
 	];
     export const accountLinks: { name: string; path: string; variant: 'default' | 'outlined' | 'fullfilled' }[] = [
         { name: 'Login', path: '#', variant: "fullfilled" },

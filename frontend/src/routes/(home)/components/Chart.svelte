@@ -37,7 +37,7 @@
         position: 'bottom' as LegendPosition,
       },
     },
-    scales: chartScalesOptions,
+    scales: chartScalesOptions(spectrum.xAxisName, spectrum.yAxisName),
   };
 
   onMount(() => {
@@ -55,7 +55,10 @@
   afterUpdate(() => {
     if (chart) {
       const currentTitle = chart.options.plugins?.title?.text;
-      if (type !== previousType || currentTitle !== spectrum.name) {
+      const currentXaxis = chart.options.scales?.x?.title?.text;
+      const currentYaxis = chart.options.scales?.x?.title?.text;
+      const { name, xAxisName, yAxisName } = spectrum;
+      if (type !== previousType || currentTitle !== name || currentXaxis !== xAxisName || currentYaxis !== yAxisName) {
         previousType = type;
         chart.destroy();
         chart = new Chart(chartCanvas, {

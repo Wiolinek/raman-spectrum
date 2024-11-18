@@ -3,21 +3,26 @@
   import { fade, slide } from 'svelte/transition';
   import Button from '$lib/components/ui/Button.svelte';
   import { renameSpectrum } from '$lib/utils/renameSpectrum';
+  import { renameAxis } from '$lib/utils/renameAxis';
   import { ChartType } from '$interfaces/chartType.enum';
+  import { Axis } from '$interfaces/spectrum.interfaces';
+  import TextInput from '$lib/components/ui/TextInput.svelte';
 
   export let chartType: ChartType;
   export let id: string;
   export let name: string;
+  export let xAxisName: string;
+  export let yAxisName: string;
 
   let isOpen = false;
 </script>
 
 <div class="shadow-xl border border-neutral-300 rounded-md bg-white text-primary">
-  <button
-    class="w-full px-4 py-3 md:py-5 md:px-6 outline-none rounded-md focus-visible:ring-ring focus-visible:ring-inset focus-visible:ring-2 items-center flex gap-x-3"
+  <Button
+    customClass="w-full px-4 py-3 md:py-5 md:px-6 gap-x-3"
     on:click={() => (isOpen = !isOpen)}
   >
-    <h4 class="text-left text-base md:text-lg w-full font-medium">Spectrum chart settings</h4>
+    <p class="text-left text-base md:text-lg w-full font-medium">Spectrum chart settings</p>
     <div class="relative size-7 transition-transform {isOpen ? 'rotate-180' : 'rotate-90'}">
       {#key isOpen}
         <span transition:fade={{ duration: 100 }}>
@@ -29,31 +34,46 @@
         </span>
       {/key}
     </div>
-  </button>
+  </Button>
   {#if isOpen}
-    <div transition:slide class="flex flex-col gap-4 px-6 py-5">
-      <div class="flex align-center gap-4">
-        <p class="flex items-center">Chart settings</p>
-        {#each Object.values(ChartType) as type}
-          <Button
-            variant="outlined"
-            customClass="w-20 shadow-lg"
-            on:click={() => (chartType = type)}
-          >
-            {type}
-          </Button>
-        {/each}
-      </div>
-      <div class="flex gap-4">
-        <label class="h-full shadow-sm rounded-md flex items-center gap-2 cursor-pointer">
-          Chart title:
-          <input
-            class="ring-1 ring-inset ring-primary rounded-md p-2 shadow-lg"
-            type="text"
-            bind:value={name}
-            on:input={() => renameSpectrum(id, name)}
-          />
-        </label>
+    <div transition:slide class="px-6 pb-5">
+      <div class="pt-5 border-t">
+        <div class="flex flex-col bg-white p-4 rounded-md gap-7 shadow-lg border">
+          <div class="flex align-center gap-4">
+            <p class="flex items-center">Chart type:</p>
+            {#each Object.values(ChartType) as type}
+              <Button
+                variant="outlined"
+                customClass="w-20 shadow-lg"
+                on:click={() => (chartType = type)}
+              >
+                {type}
+              </Button>
+            {/each}
+          </div>
+          <div class="flex h-8">
+            <TextInput
+              customClass="w-3/4"
+              label="Chart title:"
+              value={name}
+              onInput={(event) => renameSpectrum(id, event.target.value)}
+            />
+          </div>
+          <div class="flex flex-col gap-7">
+            <TextInput
+              customClass="w-3/4"
+              label="X-axis:"
+              value={xAxisName}
+              onInput={(event) => renameAxis(id, Axis.X, event.target.value)}
+            />
+            <TextInput
+              customClass="w-3/4"
+              label="Y-axis:"
+              value={yAxisName}
+              onInput={(event) => renameAxis(id, Axis.Y, event.target.value)}
+            />
+          </div>
+        </div>
       </div>
     </div>
   {/if}

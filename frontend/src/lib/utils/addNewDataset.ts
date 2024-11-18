@@ -1,8 +1,8 @@
 import { get } from 'svelte/store';
 import { Spectrum } from "../../interfaces/spectrum.interfaces";
-import { tailwindColors } from "../colorsConstants";
 import { fetchSpectra } from "./fetchSpectra";
 import { spectraStore } from '$stores/spectraStore';
+import { generateColor } from './generateColor';
 export const MAX_DATASETS_COUNT = 12;
 
 export const addNewDataset = async (event: Event, spectrumId: string) => {
@@ -23,7 +23,7 @@ export const addNewDataset = async (event: Event, spectrumId: string) => {
   const datasetsToSend = [...spectrumToUpdate.datasets];
 
   for (const file of filesToUpload) {
-    const color = tailwindColors[datasetsToSend.length % tailwindColors.length];
+    const color = generateColor();
     const content = await file.text();
     const data = content
       .trim()

@@ -3,7 +3,7 @@
 	export let customClass: string = '';
 	export let variant: 'default' | 'outlined' | 'fullfilled' = 'default';
 
-	const defaultClass = 'uppercase rounded-md drop-shadow-custom-drop-shadow text-md p-2 font-medium text-primary';
+	const defaultClass = 'uppercase rounded-md drop-shadow-custom-drop-shadow text-md py-2 px-3 font-medium text-primary';
 
 	const buttonVariants = {
 		default: '',
