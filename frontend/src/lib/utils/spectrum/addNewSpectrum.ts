@@ -1,5 +1,6 @@
+import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
-import { Spectrum } from "../../interfaces/spectrum.interfaces";
+import { Spectrum } from "../../../interfaces/spectrum.interfaces";
 import { fetchSpectra } from "./fetchSpectra";
 import { spectraStore } from '$stores/spectraStore';
 
@@ -22,8 +23,9 @@ export const addNewSpectrum = async () => {
 
     if (response.ok) {
       fetchSpectra();
+      toast.success('New spectrum has been created');
     }
   } catch (error) {
-    console.error('Error adding new spectrum:', error);
+    toast.error('Error adding new spectrum.');
   }
 };

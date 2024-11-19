@@ -1,3 +1,5 @@
+import { CreateDatasetOperationType, DatasetOperationType } from "./operationType.enum";
+
 export interface DataPoint {
   x: number;
   y: number;
@@ -13,6 +15,10 @@ export interface Dataset {
   name: string;
   data: DataPoint[];
   color: string;
+  operations: {
+    type: CreateDatasetOperationType | DatasetOperationType;
+    constant: 2
+  }
 }
 
 export interface Spectrum {

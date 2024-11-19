@@ -2,8 +2,8 @@
   import { PlusIcon, MinusIcon } from 'lucide-svelte';
   import { fade, slide } from 'svelte/transition';
   import Button from '$lib/components/ui/Button.svelte';
-  import { renameSpectrum } from '$lib/utils/renameSpectrum';
-  import { renameAxis } from '$lib/utils/renameAxis';
+  import { renameSpectrum } from '$lib/utils/spectrum/renameSpectrum';
+  import { renameAxis } from '$lib/utils/spectrum/renameAxis';
   import { ChartType } from '$interfaces/chartType.enum';
   import { Axis } from '$interfaces/spectrum.interfaces';
   import TextInput from '$lib/components/ui/TextInput.svelte';
@@ -51,23 +51,23 @@
               </Button>
             {/each}
           </div>
-          <div class="flex h-8">
+          <div class="flex h-8 w-3/4">
             <TextInput
-              customClass="w-3/4"
+              customClass="w-full"
               label="Chart title:"
               value={name}
               onInput={(event) => renameSpectrum(id, event.target.value)}
             />
           </div>
-          <div class="flex flex-col gap-7">
+          <div class="flex flex-col gap-7 w-3/4">
             <TextInput
-              customClass="w-3/4"
+              customClass="w-full"
               label="X-axis:"
               value={xAxisName}
               onInput={(event) => renameAxis(id, Axis.X, event.target.value)}
             />
             <TextInput
-              customClass="w-3/4"
+              customClass="w-full"
               label="Y-axis:"
               value={yAxisName}
               onInput={(event) => renameAxis(id, Axis.Y, event.target.value)}

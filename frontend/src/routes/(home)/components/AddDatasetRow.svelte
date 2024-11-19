@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { addNewDataset } from '$lib/utils/addNewDataset';
+  import { addNewDataset } from '$lib/utils/dataset/addNewDataset';
 
   export let spectrumId: string;
 </script>

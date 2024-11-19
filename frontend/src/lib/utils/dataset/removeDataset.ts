@@ -1,6 +1,7 @@
+import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
-import { Spectrum } from "../../interfaces/spectrum.interfaces";
-import { fetchSpectra } from './fetchSpectra';
+import { Spectrum } from "../../../interfaces/spectrum.interfaces";
+import { fetchSpectra } from '../spectrum/fetchSpectra';
 import { spectraStore } from '$stores/spectraStore';
 
 export const removeDataset = async (datasetId: string) => {
@@ -33,8 +34,9 @@ export const removeDataset = async (datasetId: string) => {
 
     if (response.ok) {
       fetchSpectra();
+      toast.success('Dataset was removed.');
     }
   } catch (error) {
-    console.error('Error removing dataset:', error);
+    toast.error('Error removing dataset.');
   }
 };

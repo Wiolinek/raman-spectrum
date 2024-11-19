@@ -1,6 +1,7 @@
+import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
-import { Spectrum } from "../../interfaces/spectrum.interfaces";
-import { fetchSpectra } from "./fetchSpectra";
+import { Spectrum } from "../../../interfaces/spectrum.interfaces";
+import { fetchSpectra } from "../spectrum/fetchSpectra";
 import { spectraStore } from '$stores/spectraStore';
 import { generateColor } from './generateColor';
 export const MAX_DATASETS_COUNT = 12;
@@ -9,7 +10,7 @@ export const addNewDataset = async (event: Event, spectrumId: string) => {
   const spectra: Spectrum[] = get(spectraStore);
   const spectrumToUpdate = spectra.find((spectrum) => spectrum.id === spectrumId);
   if (!spectrumToUpdate) {
-    console.error('Spectrum not found.');
+    toast.error('Spectrum not found.');
     return;
   }
 
@@ -57,8 +58,9 @@ export const addNewDataset = async (event: Event, spectrumId: string) => {
 
     if (response.ok) {
       fetchSpectra();
+      toast.success('New dataset was added');
     }
   } catch (error) {
-    console.error('Error adding new dataset:', error);
+    toast.error('Failed to add new dataset.');
   }
 };

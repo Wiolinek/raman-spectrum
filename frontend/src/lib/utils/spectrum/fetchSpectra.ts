@@ -1,4 +1,4 @@
-import { spectraStore } from '../../stores/spectraStore';
+import { spectraStore } from '../../../stores/spectraStore';
 
 export const fetchSpectra = async () => {
   try {

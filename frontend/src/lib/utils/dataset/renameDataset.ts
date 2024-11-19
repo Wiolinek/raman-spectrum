@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
 import { spectraStore } from '$stores/spectraStore';
-import type { Spectrum } from "../../interfaces/spectrum.interfaces";
-import { fetchSpectra } from './fetchSpectra';
+import type { Spectrum } from "../../../interfaces/spectrum.interfaces";
+import { fetchSpectra } from '../spectrum/fetchSpectra';
 
 export const renameDataset = async (datasetId: string, newName: string) => {
   const spectra: Spectrum[] = get(spectraStore);

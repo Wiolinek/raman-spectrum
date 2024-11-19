@@ -1,84 +1,29 @@
 <script lang="ts">
-  import { PlusIcon, MinusIcon, Trash2, Check, X } from 'lucide-svelte';
+  import { PlusIcon, MinusIcon, Check, X } from 'lucide-svelte';
   import { fade, slide } from 'svelte/transition';
   import Button from '$lib/components/ui/Button.svelte';
-  import { createNewDataset } from '$lib/utils/createNewDataset';
-  import type { Dataset, Spectrum } from '$interfaces/spectrum.interfaces';
+  import { createNewDataset } from '$lib/utils/dataset/createNewDataset';
+  import type { Spectrum } from '$interfaces/spectrum.interfaces';
   import { CreateDatasetOperationType } from '$interfaces/operationType.enum';
-  import { generateColor } from '$lib/utils/generateColor';
   import TextInput from '$lib/components/ui/TextInput.svelte';
+  import RadioInput from '$lib/components/ui/RadioInput.svelte';
 
   export let spectrum: Spectrum;
 
   let isOpen = false;
   let selectedDatasets: string[] = [];
-  let operation: CreateDatasetOperationType;
-  let constantValue: string = '';
-  let errorMessage: string = '';
+  let operation: CreateDatasetOperationType | null = null;
   let datasetName: string = '';
 
   const handleCreateDataset = async () => {
-    if (
-      selectedDatasets.length !== 2 &&
-      operation !== CreateDatasetOperationType.AddConstant &&
-      operation !== CreateDatasetOperationType.Multiply
-    ) {
-      errorMessage = 'Please select exactly 2 datasets for this operation.';
-      return;
+    const response = await createNewDataset(spectrum.id, selectedDatasets, operation, datasetName);
+
+    if (response?.success) {
+      selectedDatasets = [];
+      operation = null;
+      datasetName = '';
+      isOpen = false;
     }
-
-    if (
-      (operation === CreateDatasetOperationType.AddConstant ||
-        operation === CreateDatasetOperationType.Multiply) &&
-      constantValue === null
-    ) {
-      errorMessage = 'Please enter a constant value.';
-      return;
-    }
-
-    errorMessage = '';
-
-    const [dataset1, dataset2] = selectedDatasets.map((id) =>
-      spectrum.datasets.find((ds) => ds.id === id),
-    );
-
-    let newDatasetData;
-    const color = generateColor();
-
-    if (operation === OperationType.Add) {
-      newDatasetData = dataset1.data.map((point, index) => ({
-        x: point.x,
-        y: point.y + dataset2.data[index]?.y || 0,
-      }));
-    } else if (operation === OperationType.Subtract) {
-      newDatasetData = dataset1.data.map((point, index) => ({
-        x: point.x,
-        y: point.y - dataset2.data[index]?.y || 0,
-      }));
-    } else if (operation === OperationType.AddConstant) {
-      newDatasetData = dataset1.data.map((point) => ({
-        x: point.x,
-        y: point.y + constantValue,
-      }));
-    } else if (operation === OperationType.Multiply) {
-      newDatasetData = dataset1.data.map((point) => ({
-        x: point.x,
-        y: point.y * constantValue,
-      }));
-    }
-
-    const newDataset = {
-      id: `d${Date.now()}`,
-      name: `New Dataset (${operation})`,
-      data: newDatasetData,
-      color,
-    };
-
-    await createNewDataset(spectrum.id, newDataset);
-
-    selectedDatasets = [];
-    constantValue = null;
-    isOpen = false;
   };
 </script>
 
@@ -114,10 +59,10 @@
           />
           <div class="flex gap-20">
             <div class="flex flex-col gap-2">
-              <h5 class="font-medium uppercase mb-3">Select Datasets (Max 2):</h5>
+              <h5 class="font-medium uppercase mb-3">Select Datasets (Max. 2):</h5>
               {#each spectrum.datasets as dataset}
-                <div class="flex gap-2 items-end h-8">
-                  <label class="w-fit cursor-pointer">
+                <div class="flex gap-2 items-end h-8 w-full">
+                  <label class="w-full cursor-pointer">
                     <input
                       type="checkbox"
                       value={dataset.id}
@@ -141,34 +86,18 @@
             <div class="flex flex-col gap-2">
               <h5 class="font-medium uppercase mb-3">Choose Operation:</h5>
               {#each Object.values(CreateDatasetOperationType) as op}
-                <div class="flex items-end h-8">
-                  <label class="w-fit cursor-pointer">
-                    <input type="radio" name="operation" value={op} bind:group={operation} />
-                    {op}
-                  </label>
-                  {#if op === CreateDatasetOperationType.AddConstant || op === CreateDatasetOperationType.Multiply}
-                    :
-                    <TextInput
-                      customClass="mx-2 w-20"
-                      value={constantValue}
-                      onInput={() => console.log('constant value')}
-                    />
-                    <span class="text-sm text-primary/50">Enter a positive or negative integer</span>
-                  {/if}
+                <div class="flex items-end h-8 w-full">
+                  <RadioInput
+                    value={op}
+                    name="operation-create"
+                    {operation}
+                    onChange={() => (operation = op)}
+                  />
                 </div>
               {/each}
             </div>
           </div>
-
-          {#if errorMessage}
-            <p class="text-red-500">{errorMessage}</p>
-          {/if}
-
           <div class="flex gap-5 justify-end">
-            <Button customClass="shadow-lg" variant="outlined" on:click={handleCreateDataset}>
-              <Check />
-              Create dataset
-            </Button>
             <Button
               customClass="shadow-lg"
               variant="outlined"
@@ -176,6 +105,10 @@
             >
               <X />
               Clear dataset
+            </Button>
+            <Button customClass="shadow-lg" variant="outlined" on:click={handleCreateDataset}>
+              <Check />
+              Create dataset
             </Button>
           </div>
         </div>

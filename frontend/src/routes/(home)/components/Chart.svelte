@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount, afterUpdate, onDestroy } from 'svelte';
   import Chart from 'chart.js/auto';
-  import type { Spectrum } from '../../../interfaces/spectrum.interfaces';
-  import { chartScalesOptions } from '$lib/chartScalesOptions';
+  import type { Spectrum, Dataset } from '../../../interfaces/spectrum.interfaces';
+  import { chartScalesOptions } from '$lib/utils/spectrum/chartScalesOptions';
 
   export let type: 'line' | 'bar' | 'scatter';
   export let spectrum: Spectrum;
@@ -12,17 +12,35 @@
 
   type LegendPosition = 'top' | 'left' | 'right' | 'bottom' | 'center' | 'chartArea';
 
+  const processDatasets = (datasets: Dataset[]) => {
+    return datasets.map((dataset, datasetIndex) => {
+      const updatedData = dataset.data.map(({ x, y }) => {
+        if (dataset?.operations) {
+          const { type, constant } = dataset.operations;
+          if (type === 'Add constant') {
+            y += constant;
+          } else if (type === 'Multiply by') {
+            y *= constant;
+          }
+        }
+        return { x, y };
+      });
+
+      return {
+        id: dataset.id || `dataset-${datasetIndex}`,
+        label: dataset.name || `Dataset ${datasetIndex + 1}`,
+        data: updatedData.map((point) => point.y),
+        borderColor: dataset.color,
+        backgroundColor: dataset.color,
+        borderWidth: 2,
+        fill: false,
+      };
+    });
+  };
+
   $: data = {
     labels: spectrum.datasets.length > 0 ? spectrum.datasets[0].data.map((point) => point.x) : [],
-    datasets: spectrum.datasets.map((dataset, datasetIndex) => ({
-      id: dataset.id || `dataset-${datasetIndex}`,
-      label: dataset.name || `Dataset ${datasetIndex + 1}`,
-      data: dataset.data ? dataset.data.map((point) => point.y) : [],
-      borderColor: dataset.color,
-      backgroundColor: dataset.color,
-      borderWidth: 2,
-      fill: false,
-    })),
+    datasets: processDatasets(spectrum.datasets),
   };
 
   $: options = {
@@ -56,9 +74,15 @@
     if (chart) {
       const currentTitle = chart.options.plugins?.title?.text;
       const currentXaxis = chart.options.scales?.x?.title?.text;
-      const currentYaxis = chart.options.scales?.x?.title?.text;
+      const currentYaxis = chart.options.scales?.y?.title?.text;
       const { name, xAxisName, yAxisName } = spectrum;
-      if (type !== previousType || currentTitle !== name || currentXaxis !== xAxisName || currentYaxis !== yAxisName) {
+
+      if (
+        type !== previousType ||
+        currentTitle !== name ||
+        currentXaxis !== xAxisName ||
+        currentYaxis !== yAxisName
+      ) {
         previousType = type;
         chart.destroy();
         chart = new Chart(chartCanvas, {
