@@ -1,11 +1,11 @@
 <script lang="ts">
-	import '../app.css';
-	import Nav from '$lib/components/Nav.svelte';
-	import Footer from '$lib/components/Footer.svelte';
-	// let { children } = $props();
+  import { Toaster } from 'svelte-sonner';
+  import Nav from '$lib/components/Nav.svelte';
+  import Footer from '$lib/components/Footer.svelte';
+  import '../app.css';
 </script>
 
-<!-- {@render children()} -->
+<Toaster richColors />
 <Nav />
 <slot />
 <Footer />

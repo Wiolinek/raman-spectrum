@@ -41,6 +41,7 @@
 	},
 	"dependencies": {
 		"chart.js": "^4.4.6",
-		"lucide-svelte": "^0.460.1"
+		"lucide-svelte": "^0.460.1",
+		"svelte-sonner": "^0.3.28"
 	}
 }
