@@ -5,7 +5,7 @@
   import '../app.css';
 </script>
 
-<Toaster richColors />
+<Toaster richColors closeButton visibleToasts={10} duration={8000}/>
 <Nav />
 <slot />
 <Footer />

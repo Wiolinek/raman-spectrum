@@ -17,15 +17,29 @@ export const addNewDataset = async (event: Event, spectrumId: string) => {
   const files = (event.target as HTMLInputElement).files;
 
   if (!files) return;
-  if (spectrumToUpdate.datasets.length >= MAX_DATASETS_COUNT) return;
+  if (spectrumToUpdate.datasets.length >= MAX_DATASETS_COUNT) {
+    toast.error(`Maximum of ${MAX_DATASETS_COUNT} datasets allowed.`);
+    return;
+  }
 
   const remainingDatasetsCount = MAX_DATASETS_COUNT - spectrumToUpdate.datasets.length;
   const filesToUpload = Array.from(files).slice(0, remainingDatasetsCount);
   const datasetsToSend = [...spectrumToUpdate.datasets];
 
   for (const file of filesToUpload) {
-    const color = generateColor();
     const content = await file.text();
+    const isValid = validateFileContent(content);
+
+    if (!isValid && files.length === 1) {
+      toast.error(`File "${file.name}" has incorrect format. Each line should contain two numeric values separated by space or tab.`);
+      return;
+    }
+    if (!isValid && files.length > 1) {
+      toast.error(`File "${file.name}" has incorrect format. Each line should contain two numeric values separated by space or tab.`);
+      continue;
+    }
+
+    const color = generateColor();
     const data = content
       .trim()
       .split('\n')
@@ -47,6 +61,7 @@ export const addNewDataset = async (event: Event, spectrumId: string) => {
     ...spectrumToUpdate,
     datasets: datasetsToSend,
   };
+
   try {
     const response = await fetch(`http://localhost:3001/spectra/${spectrumToUpdate.id}`, {
       method: 'PUT',
@@ -58,9 +73,19 @@ export const addNewDataset = async (event: Event, spectrumId: string) => {
 
     if (response.ok) {
       fetchSpectra();
-      toast.success('New dataset was added');
+      toast.success('New dataset(s) were added.');
+    } else {
+      toast.error('Failed to update spectrum with new datasets.');
     }
   } catch (error) {
     toast.error('Failed to add new dataset.');
   }
+};
+
+const validateFileContent = (content: string): boolean => {
+  const lines = content.trim().split('\n');
+  return lines.every((line) => {
+    const values = line.trim().split(/\s+/);
+    return values.length === 2 && values.every((v) => !isNaN(Number(v)));
+  });
 };
