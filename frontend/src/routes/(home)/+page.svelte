@@ -11,60 +11,60 @@
   import { spectraStore } from '$stores/spectraStore';
   import AddDatasetRow from './components/AddDatasetRow.svelte';
   import SpectrumChartSettings from './components/SpectrumChartSettings.svelte';
-  import { ChartType } from '$interfaces/chartType.enum';
   import CreateDatasetRow from './components/CreateDatasetRow.svelte';
-
-  let chartType = ChartType.Line;
 
   onMount(async () => {
     await fetchSpectra();
   });
 </script>
 
-<main class="flex flex-col w-full max-w-screen-xl mx-auto py-16 gap-10">
-  <h1 class="text-2xl font-extrabold mb-8">Raman Spectra Viewer</h1>
+<main class="flex flex-col w-full max-w-screen-xl mx-auto pt-36 pb-16 gap-10 px-8">
+  <div class="flex flex-col w-full gap-10">
+    <h1 class="text-2xl font-extrabold mb-8">Raman Spectra Viewer</h1>
+    <Button
+      customClass="shadow-xl border border-neutral-300 h-[68px] w-96 bg-custom-gradient"
+      on:click={addNewSpectrum}
+    >
+      Create spectrum
+    </Button>
+  </div>
 
-  <Button
-    customClass="shadow-xl border border-neutral-300 h-[68px] w-96 bg-custom-gradient"
-    on:click={addNewSpectrum}
-  >
-    Create spectrum
-  </Button>
-
-  {#if $spectraStore.length > 0}
-    {#each $spectraStore as spectrum}
-      <div
-        class="flex flex-col gap-16 rounded-md shadow-heavy-box-shadow py-8 px-16"
-        id={spectrum.id}
-      >
-        <SpectrumChartSettings
+  <section>
+    {#if $spectraStore.length > 0}
+      {#each $spectraStore as spectrum}
+        <div
+          class="flex flex-col gap-16 rounded-md shadow-heavy-box-shadow py-8 px-16"
           id={spectrum.id}
-          name={spectrum.name}
-          xAxisName={spectrum.xAxisName}
-          yAxisName={spectrum.yAxisName}
-          bind:chartType
-        />
-        <Chart type={chartType} {spectrum} />
-        <div class="flex flex-col gap-3">
-          {#each spectrum.datasets as dataset}
-            <DatasetRow spectrumId={spectrum.id} {dataset} color={dataset.color} />
-          {/each}
-          {#if spectrum.datasets.length < MAX_DATASETS_COUNT}
-            <CreateDatasetRow {spectrum} />
-            <AddDatasetRow spectrumId={spectrum.id} />
-          {/if}
-          <Button
-            customClass="ml-auto mr-0 mt-10 shadow-lg bg-custom-gradient"
-            variant="outlined"
-            on:click={() => removeSpectrum(spectrum.id)}
-          >
-            <Trash2 />
-            Remove spectrum
-          </Button>
+        >
+          <SpectrumChartSettings
+            id={spectrum.id}
+            name={spectrum.name}
+            xAxisName={spectrum.xAxisName}
+            yAxisName={spectrum.yAxisName}
+            chartType={spectrum.chartType}
+          />
+          <Chart type={spectrum.chartType} {spectrum} />
+          <div class="flex flex-col gap-3">
+            {#each spectrum.datasets as dataset}
+              <DatasetRow spectrumId={spectrum.id} {dataset} color={dataset.color} />
+            {/each}
+            {#if spectrum.datasets.length < MAX_DATASETS_COUNT}
+              <CreateDatasetRow {spectrum} />
+              <AddDatasetRow spectrumId={spectrum.id} />
+            {/if}
+            <Button
+              customClass="ml-auto mr-0 mt-10 shadow-lg"
+              variant="fullfilled"
+              on:click={() => removeSpectrum(spectrum.id)}
+            >
+              <Trash2 />
+              Remove spectrum
+            </Button>
+          </div>
         </div>
-      </div>
-    {/each}
-  {:else}
-    <h2>No data available. Upload a spectrum file to view the chart.</h2>
-  {/if}
+      {/each}
+    {:else}
+      <h2>No data available. Upload a spectrum file to view the chart.</h2>
+    {/if}
+  </section>
 </main>

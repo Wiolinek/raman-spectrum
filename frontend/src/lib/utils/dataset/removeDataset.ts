@@ -1,6 +1,6 @@
 import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
-import { Spectrum } from "../../../interfaces/spectrum.interfaces";
+import { Spectrum } from "$interfaces/spectrum.interfaces";
 import { fetchSpectra } from '../spectrum/fetchSpectra';
 import { spectraStore } from '$stores/spectraStore';
 

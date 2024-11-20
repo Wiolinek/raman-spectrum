@@ -1,7 +1,7 @@
 import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
 import { spectraStore } from '$stores/spectraStore';
-import type { Spectrum } from "../../../interfaces/spectrum.interfaces";
+import type { Spectrum } from "$interfaces/spectrum.interfaces";
 import { fetchSpectra } from '../spectrum/fetchSpectra';
 import { DatasetOperationType } from "$interfaces/operationType.enum";
 
@@ -35,23 +35,25 @@ export const updateOperations = async (
       : ds,
   );
 
-  const updatedSpectrum = {
-    ...parentSpectrum,
-    datasets: updatedDatasets,
-  };
+  if (newOperation && newConstant) {
+    const updatedSpectrum = {
+      ...parentSpectrum,
+      datasets: updatedDatasets,
+    };
 
-  try {
-    const response = await fetch(`http://localhost:3001/spectra/${parentSpectrum.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedSpectrum),
-    });
+    try {
+      const response = await fetch(`http://localhost:3001/spectra/${parentSpectrum.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedSpectrum),
+      });
 
-    if (response.ok) {
-      fetchSpectra();
-      toast.success('Dataset has been updated.');
+      if (response.ok) {
+        fetchSpectra();
+        toast.success('Dataset has been updated.');
+      }
+    } catch (error) {
+      toast.error('Failed to update the dataset.');
     }
-  } catch (error) {
-    toast.error('Failed to update the dataset.');
   }
 };

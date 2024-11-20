@@ -14,7 +14,8 @@ export default {
     alias: {
       $lib: path.resolve('src/lib'),
       $stores: path.resolve('src/stores'),
-      $interfaces: path.resolve('src/interfaces')
+      $interfaces: path.resolve('src/interfaces'),
+      $schemas: path.resolve('src/schemas')
     },
   },
 };

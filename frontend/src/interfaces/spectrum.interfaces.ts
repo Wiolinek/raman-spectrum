@@ -1,3 +1,4 @@
+import { ChartType } from "./chartType.enum";
 import { CreateDatasetOperationType, DatasetOperationType } from "./operationType.enum";
 
 export interface DataPoint {
@@ -15,7 +16,7 @@ export interface Dataset {
   name: string;
   data: DataPoint[];
   color: string;
-  operations: {
+  operations?: {
     type: CreateDatasetOperationType | DatasetOperationType;
     constant: 2
   }
@@ -26,6 +27,7 @@ export interface Spectrum {
   name: string;
   xAxisName: Axis.X;
   yAxisName: Axis.Y;
+  chartType: ChartType;
   datasets: Dataset[];
   createdAt: string;
 }

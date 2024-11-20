@@ -17,7 +17,8 @@
     "paths": {
       "$lib/*": ["src/lib/*"],
       "$stores/*": ["src/stores/*"],
-      "$interfaces/*": ["src/interfaces/*"]
+      "$interfaces/*": ["src/interfaces/*"],
+      "$schema/*": ["src/schema/*"]
     }
   },
   "include": ["src/**/*", "src/**/*.svelte"]

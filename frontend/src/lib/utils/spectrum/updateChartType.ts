@@ -2,8 +2,9 @@ import { get } from 'svelte/store';
 import { Spectrum } from "$interfaces/spectrum.interfaces";
 import { fetchSpectra } from './fetchSpectra';
 import { spectraStore } from '$stores/spectraStore';
+import { ChartType } from "$interfaces/chartType.enum";
 
-export const renameSpectrum = async (spectrumId: string, newName: string) => {
+export const updateChartType = async (spectrumId: string, chartType: ChartType) => {
   const spectra: Spectrum[] = get(spectraStore);
 
   const parentSpectrum = spectra.find(spectrum => spectrum.id === spectrumId)
@@ -15,7 +16,7 @@ export const renameSpectrum = async (spectrumId: string, newName: string) => {
 
   const updatedSpectrum = {
     ...parentSpectrum,
-    name: newName,
+    chartType: chartType,
   };
 
   try {
@@ -31,6 +32,6 @@ export const renameSpectrum = async (spectrumId: string, newName: string) => {
       fetchSpectra();
     }
   } catch (error) {
-    console.error('Error renaming dataset:', error);
+    console.error('Error changing chart type', error);
   }
 };

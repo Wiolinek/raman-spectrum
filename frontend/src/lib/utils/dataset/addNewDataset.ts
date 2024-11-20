@@ -1,6 +1,6 @@
 import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
-import { Spectrum } from "../../../interfaces/spectrum.interfaces";
+import { Dataset, Spectrum } from "$interfaces/spectrum.interfaces";
 import { fetchSpectra } from "../spectrum/fetchSpectra";
 import { spectraStore } from '$stores/spectraStore';
 import { generateColor } from './generateColor';
@@ -48,7 +48,7 @@ export const addNewDataset = async (event: Event, spectrumId: string) => {
         return { x, y };
       });
 
-    const newDataset = {
+    const newDataset: Dataset = {
       id: `d${Date.now()}`,
       name: file.name,
       data,

@@ -2,11 +2,12 @@
   import { PlusIcon, MinusIcon } from 'lucide-svelte';
   import { fade, slide } from 'svelte/transition';
   import Button from '$lib/components/ui/Button.svelte';
+  import { ChartType } from '$interfaces/chartType.enum';
+  import TextInput from '$lib/components/ui/TextInput.svelte';
   import { renameSpectrum } from '$lib/utils/spectrum/renameSpectrum';
   import { renameAxis } from '$lib/utils/spectrum/renameAxis';
-  import { ChartType } from '$interfaces/chartType.enum';
+  import { updateChartType } from '$lib/utils/spectrum/updateChartType';
   import { Axis } from '$interfaces/spectrum.interfaces';
-  import TextInput from '$lib/components/ui/TextInput.svelte';
 
   export let chartType: ChartType;
   export let id: string;
@@ -43,9 +44,9 @@
             <p class="flex items-center">Chart type:</p>
             {#each Object.values(ChartType) as type}
               <Button
-                variant="outlined"
+                variant={chartType === type ? 'fullfilled' : 'outlined'}
                 customClass="w-20 shadow-lg"
-                on:click={() => (chartType = type)}
+                on:click={() => updateChartType(id, type)}
               >
                 {type}
               </Button>

@@ -1,6 +1,6 @@
 import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
-import { Dataset, Spectrum } from "../../../interfaces/spectrum.interfaces";
+import { Dataset, Spectrum } from "$interfaces/spectrum.interfaces";
 import { fetchSpectra } from "../spectrum/fetchSpectra";
 import { spectraStore } from '$stores/spectraStore';
 import { CreateDatasetOperationType } from '$interfaces/operationType.enum';
