@@ -109,7 +109,7 @@ import { toast } from 'svelte-sonner';
             </Button>
             <Button
               customClass="shadow-lg"
-              variant="outlined"
+              variant="fullfilled"
               on:click={() => removeDataset(dataset.id)}
             >
               <Trash2 />

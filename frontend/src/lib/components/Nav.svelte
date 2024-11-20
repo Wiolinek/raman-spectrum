@@ -10,26 +10,16 @@
 </script>
 
 <script lang="ts">
-	// import { routes } from '$lib/routes';
-	// import Logo from '$lib/components/svg/logo.svg?component';
-	// import { Button } from './ui/button';
 	import Link from '$lib/components/ui/Link.svelte';
-	// import { PUBLIC_APPLICATION_URL } from '$env/static/public';
-	// import { Menu, X } from 'lucide-svelte';
-	// import { cn } from '$lib/utils/cn';
-	// import { slide } from 'svelte/transition';
-
-	// export let menuOpen: boolean;
-	// import { scrollToElement } from '$lib/utils/scrollToElement';
     import LogoImage from '$lib/images/logo-new.png';
 </script>
 
 
 
-<nav class="flex items-center sticky text-primary shadow-custom-box-shadow text-lg font-medium h-20 bg-custom-gradient" >
-    <div class="flex w-full max-w-screen-xl mx-auto gap-14">
+<nav class="flex items-center fixed w-full text-primary shadow-custom-box-shadow text-lg font-medium h-20 bg-custom-gradient z-10" >
+    <div class="flex w-full max-w-screen-xl mx-auto gap-14 px-8">
         <a href='/'>
-            <img alt="" src={LogoImage} class="w-40"/>
+            <img alt="" src={LogoImage} class="w-40 -ml-2"/>
         </a>
         <div class="w-full flex justify-between">
             <ul class="flex items-center gap-6">

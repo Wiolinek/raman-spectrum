@@ -1,4 +1,5 @@
 <script lang="ts">
+  export let type: "button" | "submit" = 'button';
   export let customClass: string = '';
   export let disabled: boolean = false;
   export let variant: 'default' | 'outlined' | 'fullfilled' = 'default';
@@ -9,10 +10,10 @@
   const buttonVariants = {
     default: '',
     outlined: 'ring-1 ring-inset ring-primary hover:bg-neutral-100',
-    fullfilled: 'bg-primary text-white hover:bg-neutral-300',
+    fullfilled: 'bg-primary text-white',
   };
 </script>
 
-<button class={`${defaultClass} ${buttonVariants[variant]} ${customClass}`} {disabled} on:click>
+<button {type} class={`${defaultClass} ${buttonVariants[variant]} ${customClass}`} {disabled} on:click>
   <slot />
 </button>
