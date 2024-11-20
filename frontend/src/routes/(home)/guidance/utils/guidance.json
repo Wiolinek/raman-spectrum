@@ -1,0 +1,50 @@
+{
+  "title": "User Guidance for Raman Spectrum Viewer",
+  "sections": [
+    {
+      "heading": "Getting Started",
+      "content": [
+        "Ensure you have the Raman spectrum data files (in `.txt` format) ready for upload.",
+        "Click the *Create spectrum* button to create new spectrum chart. New empty chart will be created."
+      ]
+    },
+    {
+      "heading": "Visualizing Spectra",
+      "content": [
+        "Select one or more datasets files from your device.",
+        "The files should have two columns: X-axis values in the first column and Y-axis values in the second column.",
+        "You can upload or create maximum 12 datasets for one spectrum chart.",
+        "Once uploaded, the dataset will be displayed automatically as XY-plots.",
+        "Each uploaded dataset is displayed as an unique line plot, with colors distinguishing different datasets.",
+        "A legend below the graph shows the file names. The legend helps identify each dataset.",
+        "Click a legend entry to show or hide the corresponding dataset on chart."
+      ]
+    },
+    {
+      "heading": "Performing Datasets Operations",
+      "content": [
+        "Each dataset can be modified by performing mathematical operations.",
+        "You can add a positive or negative integer to Y-axis values.",
+        "You can multiply Y-axis values by positive integer.",
+        "You can create new dataset by choosing 2 of already existing datasets and adding or subtracting them.",
+        "You can rename or remove dataset in specific dataset settings section."
+      ]
+    },
+    {
+      "heading": "Adjusting the Graph",
+      "content": [
+        "The X and Y axis ranges automatically adjust to fit the spectrum with the largest range.",
+        "Use the legend to remove unnecessary spectra to declutter the plot.",
+        "You can change chart type, rename axis or chart title in Spectrum Chart Setting section."
+        
+      ]
+    },
+    {
+      "heading": "Help and Tips",
+      "content": [
+        "Keep labels short but descriptive to avoid confusion during operations.",
+        "Ensure the files have consistent formatting (2 columns separated by spaces, period as decimal separator)."
+      ]
+    }
+  ]
+}
