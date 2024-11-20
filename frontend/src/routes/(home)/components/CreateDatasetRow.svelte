@@ -25,6 +25,18 @@
       isOpen = false;
     }
   };
+
+  const isDatasetSelected = (id: string) => selectedDatasets.includes(id);
+
+  const toggleDatasetSelection = (id: string, checked: boolean) => {
+    if (checked) {
+      if (selectedDatasets.length < 2) {
+        selectedDatasets = [...selectedDatasets, id];
+      }
+    } else {
+      selectedDatasets = selectedDatasets.filter((datasetId) => datasetId !== id);
+    }
+  };
 </script>
 
 <div class="shadow-xl border border-neutral-300 rounded-md bg-white text-primary">
@@ -55,7 +67,7 @@
             customClass="w-3/4"
             label="Name:"
             value={datasetName}
-            onInput={() => console.log('set name')}
+            onInput={(event) => datasetName = event.target.value}
           />
           <div class="flex gap-20">
             <div class="flex flex-col gap-2">
@@ -65,18 +77,12 @@
                   <label class="w-full cursor-pointer">
                     <input
                       type="checkbox"
-                      value={dataset.id}
-                      on:change={(e) => {
-                        const isChecked = e.target.checked;
-                        if (isChecked) {
-                          if (selectedDatasets.length < 2)
-                            selectedDatasets = [...selectedDatasets, dataset.id];
-                        } else {
-                          selectedDatasets = selectedDatasets.filter((id) => id !== dataset.id);
-                        }
-                      }}
-                      disabled={selectedDatasets.length >= 2 &&
-                        !selectedDatasets.includes(dataset.id)}
+                      checked={isDatasetSelected(dataset.id)}
+                      on:change={(e) => toggleDatasetSelection(dataset.id, e.target.checked)}
+                      disabled={
+                        selectedDatasets.length >= 2 &&
+                        !selectedDatasets.includes(dataset.id)
+                      }
                     />
                     {dataset.name}
                   </label>
@@ -101,12 +107,20 @@
             <Button
               customClass="shadow-lg"
               variant="outlined"
-              on:click={() => console.log('usuń ten dataset')}
+              on:click={() => {
+                selectedDatasets = [];
+                operation = null;
+                datasetName = '';
+              }}
             >
               <X />
               Clear dataset
             </Button>
-            <Button customClass="shadow-lg" variant="outlined" on:click={handleCreateDataset}>
+            <Button
+              customClass="bg-custom-gradient"
+              variant="outlined"
+              on:click={handleCreateDataset}
+            >
               <Check />
               Create dataset
             </Button>
