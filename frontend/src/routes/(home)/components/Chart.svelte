@@ -3,8 +3,10 @@
   import Chart from 'chart.js/auto';
   import type { Spectrum, Dataset } from '$interfaces/spectrum.interfaces';
   import { chartScalesOptions } from '$lib/utils/spectrum/chartScalesOptions';
+  import { DatasetOperationType } from '$interfaces/operationType.enum';
+  import { ChartType } from '$interfaces/chartType.enum';
 
-  export let type: 'line' | 'bar' | 'scatter';
+  export let type: ChartType;
   export let spectrum: Spectrum;
 
   let chartCanvas: HTMLCanvasElement;
@@ -17,9 +19,9 @@
       const updatedData = dataset.data.map(({ x, y }) => {
         if (dataset?.operations) {
           const { type, constant } = dataset.operations;
-          if (type === 'Add constant') {
+          if (type === DatasetOperationType.AddConstant) {
             y += constant;
-          } else if (type === 'Multiply by') {
+          } else if (type === DatasetOperationType.Multiply) {
             y *= constant;
           }
         }
@@ -33,6 +35,7 @@
         borderColor: dataset.color,
         backgroundColor: dataset.color,
         borderWidth: 2,
+        pointRadius: type === ChartType.Scatter ? 2 : 0,
         fill: false,
       };
     });
@@ -68,7 +71,7 @@
     }
   });
 
-  let previousType: 'line' | 'bar' | 'scatter' = type;
+  let previousType: ChartType = type;
 
   afterUpdate(() => {
     if (chart) {

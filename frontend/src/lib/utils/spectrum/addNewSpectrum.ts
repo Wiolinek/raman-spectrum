@@ -3,11 +3,15 @@ import { get } from 'svelte/store';
 import { Spectrum } from "$interfaces/spectrum.interfaces";
 import { fetchSpectra } from "./fetchSpectra";
 import { spectraStore } from '$stores/spectraStore';
+import { ChartType } from '$interfaces/chartType.enum';
 
 export const addNewSpectrum = async () => {
   const spectra: Spectrum[] = get(spectraStore);
   const newSpectrum = {
     name: `New Spectrum ${spectra.length + 1}`,
+    xAxisName: "X-axis",
+    yAxisName: "Y-axis",
+    chartType: ChartType.Line,
     datasets: [],
     createdAt: new Date().toISOString(),
   };

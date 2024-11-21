@@ -62,70 +62,72 @@
   {#if isOpen}
     <div transition:slide class="px-6 pb-5">
       <div class="pt-5 border-t">
-        <div class="flex flex-col bg-white p-4 rounded-md gap-7 shadow-lg border">
-          <TextInput
-            customClass="w-3/4"
-            label="Name:"
-            value={datasetName}
-            onInput={(event) => datasetName = event.target.value}
-          />
-          <div class="flex gap-20">
-            <div class="flex flex-col gap-2">
-              <h5 class="font-medium uppercase mb-3">Select Datasets (Max. 2):</h5>
-              {#each spectrum.datasets as dataset}
-                <div class="flex gap-2 items-end h-8 w-full">
-                  <label class="w-full cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isDatasetSelected(dataset.id)}
-                      on:change={(e) => toggleDatasetSelection(dataset.id, e.target.checked)}
-                      disabled={
-                        selectedDatasets.length >= 2 &&
-                        !selectedDatasets.includes(dataset.id)
-                      }
+        {#if spectrum.datasets.length === 0}
+          <p class="text-red">First, you need to upload at least 2 datasets to this chart</p>
+        {:else}
+          <div class="flex flex-col bg-white p-4 rounded-md gap-7 shadow-lg border">
+            <TextInput
+              customClass="w-3/4"
+              label="Name:"
+              value={datasetName}
+              onInput={(event) => (datasetName = event.target.value)}
+            />
+            <div class="flex gap-20">
+              <div class="flex flex-col gap-2">
+                <h5 class="font-medium uppercase mb-3">Select Datasets (Max. 2):</h5>
+                {#each spectrum.datasets as dataset}
+                  <div class="flex gap-2 items-end h-8 w-full">
+                    <label class="w-full cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={isDatasetSelected(dataset.id)}
+                        on:change={(e) => toggleDatasetSelection(dataset.id, e.target.checked)}
+                        disabled={selectedDatasets.length >= 2 &&
+                          !selectedDatasets.includes(dataset.id)}
+                      />
+                      {dataset.name}
+                    </label>
+                  </div>
+                {/each}
+              </div>
+              <div class="flex flex-col gap-2">
+                <h5 class="font-medium uppercase mb-3">Choose Operation:</h5>
+                {#each Object.values(CreateDatasetOperationType) as op}
+                  <div class="flex items-end h-8 w-full">
+                    <RadioInput
+                      value={op}
+                      name="operation-create"
+                      {operation}
+                      onChange={() => (operation = op)}
                     />
-                    {dataset.name}
-                  </label>
-                </div>
-              {/each}
+                  </div>
+                {/each}
+              </div>
             </div>
-            <div class="flex flex-col gap-2">
-              <h5 class="font-medium uppercase mb-3">Choose Operation:</h5>
-              {#each Object.values(CreateDatasetOperationType) as op}
-                <div class="flex items-end h-8 w-full">
-                  <RadioInput
-                    value={op}
-                    name="operation-create"
-                    {operation}
-                    onChange={() => (operation = op)}
-                  />
-                </div>
-              {/each}
+            <div class="flex gap-5 justify-end">
+              <Button
+                customClass="shadow-lg"
+                variant="outlined"
+                on:click={() => {
+                  selectedDatasets = [];
+                  operation = null;
+                  datasetName = '';
+                }}
+              >
+                <X />
+                Clear dataset
+              </Button>
+              <Button
+                customClass="bg-custom-gradient"
+                variant="outlined"
+                on:click={handleCreateDataset}
+              >
+                <Check />
+                Create dataset
+              </Button>
             </div>
           </div>
-          <div class="flex gap-5 justify-end">
-            <Button
-              customClass="shadow-lg"
-              variant="outlined"
-              on:click={() => {
-                selectedDatasets = [];
-                operation = null;
-                datasetName = '';
-              }}
-            >
-              <X />
-              Clear dataset
-            </Button>
-            <Button
-              customClass="bg-custom-gradient"
-              variant="outlined"
-              on:click={handleCreateDataset}
-            >
-              <Check />
-              Create dataset
-            </Button>
-          </div>
-        </div>
+        {/if}
       </div>
     </div>
   {/if}

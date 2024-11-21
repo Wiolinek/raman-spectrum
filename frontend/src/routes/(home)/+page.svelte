@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Trash2 } from 'lucide-svelte';
+  import { Trash2, ArrowUp, ArrowDown } from 'lucide-svelte';
   import Button from '$lib/components/ui/Button.svelte';
   import Chart from './components/Chart.svelte';
   import DatasetRow from './components/DatasetRow.svelte';
@@ -13,20 +13,43 @@
   import SpectrumChartSettings from './components/SpectrumChartSettings.svelte';
   import CreateDatasetRow from './components/CreateDatasetRow.svelte';
 
+  let isAscending = false;
+
   onMount(async () => {
     await fetchSpectra();
   });
+
+  const sortSpectra = () => {
+    isAscending = !isAscending;
+    spectraStore.update((spectra) => {
+      return [...spectra].sort((a, b) => {
+        return isAscending
+          ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() // Ascending
+          : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(); // Descending
+      });
+    });
+  };
 </script>
 
 <main class="flex flex-col w-full max-w-screen-xl mx-auto pt-36 pb-16 gap-10 px-8">
   <div class="flex flex-col w-full gap-10">
     <h1 class="text-2xl font-extrabold mb-8">Raman Spectra Viewer</h1>
-    <Button
-      customClass="shadow-xl border border-neutral-300 h-[68px] w-96 bg-custom-gradient"
-      on:click={addNewSpectrum}
-    >
-      Create spectrum
-    </Button>
+    <div class="flex justify-between items-end w-full">
+      <Button
+        customClass="shadow-xl border border-neutral-300 h-[68px] w-96 bg-custom-gradient"
+        on:click={addNewSpectrum}
+      >
+        Create spectrum
+      </Button>
+      <Button customClass="shadow-xl border border-neutral-300" on:click={sortSpectra}>
+        Sort by Created Date
+        {#if isAscending}
+          <ArrowUp />
+        {:else}
+          <ArrowDown />
+        {/if}
+      </Button>
+    </div>
   </div>
 
   <section>
@@ -68,3 +91,9 @@
     {/if}
   </section>
 </main>
+
+<style>
+  .transition-transform {
+    transition: transform 0.3s ease-in-out;
+  }
+</style>
